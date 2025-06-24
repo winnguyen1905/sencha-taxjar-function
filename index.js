@@ -5,6 +5,8 @@ export default async ({ req, res }) => {
 
     const client = new Taxjar({ apiKey: process.env.TAXJAR_API_KEY });
 
+    console.log(process.env.TAXJAR_API_KEY);
+
     const { tax } = await client.taxForOrder({
         from_country: 'US',
         from_state: 'CA',   // <- your nexus
