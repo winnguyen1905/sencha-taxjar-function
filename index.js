@@ -3,7 +3,7 @@ import Taxjar from 'taxjar';
 export default async ({ req, res, log, error }) => {
   try {
     // Log the request body to see what it contains
-    log("1 Request body:", JSON.stringify(req.bodyJson));
+    log("1 Request body:", req.bodyText);
 
     // Ensure the request body is not empty
     if (!req.body || req.body.trim() === "") {
