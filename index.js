@@ -11,7 +11,7 @@ export default async ({ req, res, log, error }) => {
     // }
 
     // Try parsing the request body safely
-    const { to_zip, to_state, amount, shipping = 0 } =  {to_zip: 1112, to_state: 'CA', amount: 10, shipping: 2};
+    const { to_zip, to_state, amount, shipping = 0 } =  {to_zip: 93599, to_state: 'CA', amount: 10, shipping: 2};
 
     log("3: ", to_zip, to_state, amount, shipping);
 
