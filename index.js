@@ -1,9 +1,9 @@
 import Taxjar from 'taxjar';
 
-export default async ({ req, res }) => {
+export default async (context) => {
   try {
     // Parse the body of the request
-    const { to_zip, to_state, amount, shipping = 0 } = JSON.parse(req.body);
+    const { to_zip, to_state, amount, shipping = 0 } = JSON.parse(context.request.body);
 
     // Initialize Taxjar client
     const client = new Taxjar({ apiKey: process.env.TAXJAR_API_KEY });
@@ -26,32 +26,23 @@ export default async ({ req, res }) => {
     if (response && response.tax) {
       const { tax } = response;
 
-      // Send response as JSON
-      res.setHeader('Content-Type', 'application/json');  // Ensure the response is JSON
-      res.send({
+      // Send response as JSON using Appwrite's context.response
+      context.response.status(200).json({
         salesTax: tax.amount_to_collect,
         rate: tax.rate,
       });
     } else {
       // Handle the case where the response does not contain the expected data
       console.log("Tax information not found in Taxjar response."); // Debugging missing tax info
-      res.setHeader('Content-Type', 'application/json');  // Ensure the response is JSON
-      res.send({
+      context.response.status(500).json({
         error: 'Invalid response from Taxjar API. No tax information found.',
       });
     }
-
-    // Ensure you explicitly return the response to satisfy Appwrite's function handler
-    return res;
   } catch (error) {
     // Catch any errors and return them as a JSON response
     console.error("Error occurred:", error); // Debugging the error
-    res.setHeader('Content-Type', 'application/json');  // Ensure the response is JSON
-    res.send({
+    context.response.status(500).json({
       error: error.message,
     });
-
-    // Ensure you explicitly return the response to satisfy Appwrite's function handler
-    return res;
   }
 };
