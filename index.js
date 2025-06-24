@@ -1,6 +1,6 @@
 import Taxjar from 'taxjar';
 
-export default async ({ req, res, log, error }) => {
+export default async ({ req, res, log }) => {
     try {
         // Parse the body of the request
         const { to_zip, to_state, amount, shipping = 0 } = JSON.parse(req.body);
@@ -40,29 +40,23 @@ export default async ({ req, res, log, error }) => {
             const { tax } = response;
 
             // Send response as JSON
-            res.send({
+            return res.send({
                 salesTax: tax.amount_to_collect,
                 rate: tax.rate,
             });
 
         } else {
             log("Message: ", "Invalid response from Taxjar API. No tax information found.");
-            // Handle the case where the response does not contain the expected data
-            res.send({
+            return res.send({
                 error: 'Invalid response from Taxjar API. No tax information found.',
             });
         }
 
-        // Ensure you explicitly return the response to satisfy Appwrite's function handler
-        return res;
     } catch (err) {
         log("Error: ", err);
         // Catch any errors and return them as a JSON response
-        res.send({
+        return res.send({
             error: err.message,  // Just send the error message, no need for the client object
         });
-
-        // Ensure you explicitly return the response to satisfy Appwrite's function handler
-        return res;
     }
 };
