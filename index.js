@@ -34,22 +34,22 @@ export default async (context) => {
     if (response && response.tax) {
       const { tax } = response;
 
-      // Send response as JSON using Appwrite's context.response
-      context.response.status(200).json({
+      // Send response as JSON using Appwrite's context.response.send
+      return context.response.send({
         salesTax: tax.amount_to_collect,
         rate: tax.rate,
       });
     } else {
       // Handle the case where the response does not contain the expected data
       console.log("Tax information not found in Taxjar response."); // Debugging missing tax info
-      context.response.status(500).json({
+      return context.response.send({
         error: 'Invalid response from Taxjar API. No tax information found.',
       });
     }
   } catch (error) {
     // Catch any errors and return them as a JSON response
     console.error("Error occurred:", error); // Debugging the error
-    context.response.status(500).json({
+    return context.response.send({
       error: error.message,
     });
   }
