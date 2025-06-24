@@ -3,7 +3,7 @@ import Taxjar from 'taxjar';
 export default async (context) => {
   try {
     // Log the request body to see what it contains
-    console.log("Request body:", context.request.body);
+    context.log("Request body:", context.request.body);
 
     // Ensure the request body is not empty
     if (!context.request.body || context.request.body.trim() === "") {
@@ -28,7 +28,7 @@ export default async (context) => {
       shipping,
     });
 
-    console.log("Taxjar response:", response); // Debugging the response
+    context.log("Taxjar response:", response); // Debugging the response
 
     // Check if response contains the expected 'tax' object
     if (response && response.tax) {
@@ -41,14 +41,14 @@ export default async (context) => {
       });
     } else {
       // Handle the case where the response does not contain the expected data
-      console.log("Tax information not found in Taxjar response."); // Debugging missing tax info
+      context.log("Tax information not found in Taxjar response."); // Debugging missing tax info
       return context.response.send({
         error: 'Invalid response from Taxjar API. No tax information found.',
       });
     }
   } catch (error) {
     // Catch any errors and return them as a JSON response
-    console.error("Error occurred:", error); // Debugging the error
+    context.log("Error occurred:", error); // Debugging the error
     return context.response.send({
       error: error.message,
     });
