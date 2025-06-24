@@ -9,7 +9,7 @@ export default async ({ req, res }) => {
     const client = new Taxjar({ apiKey: process.env.TAXJAR_API_KEY });
 
     // Calculate tax using Taxjar API
-    const { tax } = await client.taxForOrder({
+    const response = await client.taxForOrder({
       from_country: 'US',
       from_state: 'CA',   // Use your nexus state
       from_zip: '94111',   // Use your nexus zip
@@ -20,11 +20,21 @@ export default async ({ req, res }) => {
       shipping,
     });
 
-    // Send response as JSON
-    res.send({
-      salesTax: tax.amount_to_collect,
-      rate: tax.rate,
-    });
+    // Check if response contains the expected 'tax' object
+    if (response && response.tax) {
+      const { tax } = response;
+
+      // Send response as JSON
+      res.send({
+        salesTax: tax.amount_to_collect,
+        rate: tax.rate,
+      });
+    } else {
+      // Handle the case where the response does not contain the expected data
+      res.send({
+        error: 'Invalid response from Taxjar API. No tax information found.',
+      });
+    }
 
     // Ensure you explicitly return the response to satisfy Appwrite's function handler
     return res;
@@ -32,11 +42,10 @@ export default async ({ req, res }) => {
     // Catch any errors and return them as a JSON response
     res.send({
       error: error.message,
+      client: client
     });
 
     // Ensure you explicitly return the response to satisfy Appwrite's function handler
-    return res.send({
-      custom: tax,
-    });
+    return res;
   }
 };
