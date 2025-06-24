@@ -3,6 +3,7 @@ import Taxjar from 'taxjar';
 export default async ({ req, res, log }) => {
     try {
         // Parse the body of the request
+        log("0: ", req.body);
         const { to_zip, to_state, amount, shipping = 0 } = JSON.parse(req.body);
 
         if (!to_zip || !to_state || !amount) {
