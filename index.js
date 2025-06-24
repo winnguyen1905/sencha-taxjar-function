@@ -5,8 +5,20 @@ export default async ({ req, res }) => {
     // Parse the body of the request
     const { to_zip, to_state, amount, shipping = 0 } = JSON.parse(req.body);
 
+    if (!to_zip || !to_state || !amount) {
+      return res.send({
+        error: 'Missing required parameters.',
+      });
+    }
+
     // Initialize Taxjar client
     const client = new Taxjar({ apiKey: process.env.TAXJAR_API_KEY });
+
+    if (!client) {
+      return res.send({
+        error: 'Taxjar client not initialized.',
+      });
+    }
 
     // Calculate tax using Taxjar API
     const response = await client.taxForOrder({
