@@ -1,17 +1,19 @@
 import Taxjar from 'taxjar';
 
-export default async (context) => {
+export default async ({ req, res, log, error }) => {
   try {
     // Log the request body to see what it contains
-    context.log("Request body:", context.request);
+    log("1 Request body:", req.body);
 
     // Ensure the request body is not empty
-    if (!context.request.body || context.request.body.trim() === "") {
-      throw new Error("Request body is empty.");
+    if (!req.body || req.body.trim() === "") {
+      throw new Error("2 Request body is empty.");
     }
 
     // Try parsing the request body safely
-    const { to_zip, to_state, amount, shipping = 0 } = JSON.parse(context.request.body);
+    const { to_zip, to_state, amount, shipping = 0 } = JSON.parse(req.body);
+
+    log("3: ", to_zip, to_state, amount, shipping);
 
     // Initialize Taxjar client
     const client = new Taxjar({ apiKey: process.env.TAXJAR_API_KEY });
@@ -28,28 +30,28 @@ export default async (context) => {
       shipping,
     });
 
-    context.log("Taxjar response:", response); // Debugging the response
+    log("4: ", response); // Debugging the response
 
     // Check if response contains the expected 'tax' object
     if (response && response.tax) {
       const { tax } = response;
 
       // Send response as JSON using Appwrite's context.response.send
-      return context.response.send({
+      return res.json({
         salesTax: tax.amount_to_collect,
         rate: tax.rate,
       });
     } else {
       // Handle the case where the response does not contain the expected data
-      context.log("Tax information not found in Taxjar response."); // Debugging missing tax info
-      return context.response.send({
+      log("5: Tax information not found in Taxjar response."); // Debugging missing tax info
+      return res.json({
         error: 'Invalid response from Taxjar API. No tax information found.',
       });
     }
   } catch (error) {
     // Catch any errors and return them as a JSON response
-    context.log("Error occurred:", error); // Debugging the error
-    return context.response.send({
+    log("6: Error occurred:", error); // Debugging the error
+    return res.json({
       error: error.message,
     });
   }
