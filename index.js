@@ -25,10 +25,16 @@ export default async ({ req, res }) => {
       salesTax: tax.amount_to_collect,
       rate: tax.rate,
     });
+
+    // Ensure you explicitly return the response to satisfy Appwrite's function handler
+    return res;
   } catch (error) {
     // Catch any errors and return them as a JSON response
     res.send({
       error: error.message,
     });
+
+    // Ensure you explicitly return the response to satisfy Appwrite's function handler
+    return res;
   }
 };
