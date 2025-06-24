@@ -41,8 +41,7 @@ export default async ({ req, res }) => {
   } catch (error) {
     // Catch any errors and return them as a JSON response
     res.send({
-      error: error.message,
-      client: client
+      error: error.message,  // Just send the error message, no need for the client object
     });
 
     // Ensure you explicitly return the response to satisfy Appwrite's function handler
