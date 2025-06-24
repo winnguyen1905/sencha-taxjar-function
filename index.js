@@ -22,6 +22,6 @@ export default async ({ req, res }) => {
             rate: tax.rate,
         });
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        return res.status(200).json({ error: error.message });
     }
 };
