@@ -3,15 +3,15 @@ import Taxjar from 'taxjar';
 export default async ({ req, res, log, error }) => {
   try {
     // Log the request body to see what it contains
-    log("1 Request body:", req.bodyJson);
+    log("1 Request body:", JSON.stringify(req.bodyJson));
 
     // Ensure the request body is not empty
-    if (!req.bodyJson || req.bodyJson.trim() === "") {
+    if (!req.body || req.body.trim() === "") {
       throw new Error("2 Request body is empty.");
     }
 
     // Try parsing the request body safely
-    const { to_zip, to_state, amount, shipping = 0 } = JSON.parse(req.bodyJson);
+    const { to_zip, to_state, amount, shipping = 0 } = JSON.parse(req.body);
 
     log("3: ", to_zip, to_state, amount, shipping);
 
