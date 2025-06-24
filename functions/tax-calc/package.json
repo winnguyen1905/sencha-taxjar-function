@@ -1,6 +1,3 @@
 {
-    "type": "module",
-    "dependencies": {
-        "taxjar": "^6.1.0"
-    }
+    
 }
