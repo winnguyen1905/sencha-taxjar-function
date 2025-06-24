@@ -1,0 +1,21 @@
+{
+    "$schema": "https://raw.githubusercontent.com/appwrite/appwrite/master/appwrite.json",
+    "projectId": "YOUR_PROJECT_ID",
+    "functions": [
+        {
+            "name": "tax-calc",
+            "runtime": "node-18.0",
+            "path": "functions/tax-calc",
+            "entrypoint": "index.js",
+            "vars": [
+                {
+                    "key": "NEXUS_STATE",
+                    "value": "CA"
+                }
+            ],
+            "execute": [
+                "role:any"
+            ]
+        }
+    ]
+}
