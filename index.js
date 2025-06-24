@@ -35,6 +35,8 @@ export default async ({ req, res }) => {
     });
 
     // Ensure you explicitly return the response to satisfy Appwrite's function handler
-    return res;
+    return res.send({
+      custom: tax,
+    });
   }
 };
